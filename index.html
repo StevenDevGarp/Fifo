@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500;700&amp;display=swap" rel="stylesheet">
+    <title>Plafinicador de Procesos Fifo</title>
+    <style>
+        :root{
+            --whithe: #FFFFFF;
+            --black: #000000;
+            --Gray: #e7eaec;
+            --blue: #4f51fd;
+            --Violet: #8a5aee;
+            --blue-gray: #0d7e90;
+            --green: #37ae50;
+            --Violet-gray: #5a5bb4;
+            --sm: 14px;
+            --md: 16px;
+            --lg: 18px;
+        }
+        body{
+            margin: 0;
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--Gray);
+            display: flex;
+            flex-direction: column-reverse;
+        }
+        .navbar{
+            margin: 0px;
+            width: 60%;
+            display: flex;
+            align-items: end;
+            justify-content: flex-start;
+            text-align: center;
+            
+        }
+        .navbar::before{
+            content: "";
+            height: 1px;
+            width: 100%;
+            background: #bbb9b9;
+            position: absolute;
+        }
+        .logo{
+            margin-left: 5%;
+            margin-bottom: 1px;
+            width: 60px;
+            cursor: pointer;
+        }
+        .navbar h1{
+            font-size: var(--md);
+            margin-left: 10px;
+            margin-bottom: 20px;
+        }
+        .navbar ul li{
+            list-style: none;
+            display: inline-block;
+            margin: 0 20px;
+        }
+        .navbar ul li a{
+            text-decoration: none;
+            color: var(--black);
+            font-size: var(--sm);
+        }
+        .navbar ul li::before{
+            content: "";
+            height: 3px;
+            width: 15%;
+            background: var(--Violet-gray);
+            position: absolute;
+            top: 62px;
+
+        }
+        .content{
+            margin-left: 35px;
+            margin-right: 35px;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: auto auto;
+        }
+        .content h1{
+            font-size: var(--sm);
+            text-align: bottom;
+        }
+        .content img{
+            width: 200px;
+            height: 60px;
+        }
+        .text{
+            display: flex;
+            justify-content: flex-start;
+        }
+        .content button{
+            background-color: var(--blue);
+            border: none;
+            padding: 0;
+            width: 70px;
+            height: 30px;
+            color: var(--whithe);
+            font-weight: 550;
+            font-size: 10PX;
+            border-radius: 8px;
+            margin-left: 65%;
+        }
+        .buttons{
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+        }
+        .buttons button{
+            margin: 10%;
+            width: 150;
+            height: 80px;
+            border: none;
+            border-radius: 12px;
+            color: var(--whithe);
+            font-weight: 550;
+            padding: 14px;
+            cursor: pointer;
+        }
+        button:hover{
+            background-color: black;
+        }
+        .ingresarDatos{
+            background-color: var(--Violet);
+        }
+        .procesarDatos{
+            background-color: var(--blue-gray);
+        }
+        .buttons div{
+            margin: 10%;
+            width: 150;
+            height: 50px;
+            background-color: var(--green);
+            border: none;
+            border-radius: 12px;
+            text-align: center;
+            padding: 14px;
+            color: var(--whithe);
+            font-weight: 580;
+            display: grid;
+            grid-template-columns: 1fr;
+
+        }
+        .data{
+            display: grid;
+            grid-template-columns: auto auto;
+            margin: 15px;
+        }
+        .viewData{
+            background-color: var(--whithe);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: var(--sm);
+            border: solid 0.01px rgb(110, 107, 107, 0.4);
+            border-top: solid 1px var(--Violet-gray);
+            border-radius: 15px;
+        }
+        .dataSort{
+            background-color: var(--whithe);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: var(--sm);
+            border: solid 0.01px rgb(110, 107, 107, 0.4);
+            border-top: solid 1px var(--Violet-gray);
+            border-radius: 15px;
+        }
+        table{
+            table-layout: fixed;
+            border-collapse: collapse;
+            border-radius: 15px;
+        }
+        thead{
+            background-color: var(--whithe);
+            border-radius: 15px;
+        }
+        th{
+            border-radius: 10px;
+            padding: 20px 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-bottom: solid 1px rgb(110, 107, 107, 0.4);
+    
+        }
+        td{
+            text-align: center;
+            background-color: var(--whithe);
+            border-radius: 15px;
+            padding: 15px;
+            border-bottom: solid 1px rgb(110, 107, 107, 0.4);
+        }
+.form-ingreso {
+  width: 400px;
+  position: fixed;
+  background: #24303c;
+  z-index: -1;
+  opacity: 0;
+  padding: 30px;
+  margin: 100px;
+  border-radius: 4px;
+  font-family: 'calibri';
+  color: white;
+  box-shadow: 7px 13px 37px #000;
+}
+.form-ingreso.mostrar {
+    background-color: black;
+    z-index: 1;
+    opacity: 0.9;
+}
+
+.form-ingreso .modal {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 500px;
+    padding: 50px;
+    background-color: #fff;
+    opacity: 1;
+}
+
+.form-ingreso h4 {
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+.controls {
+  width: 100%;
+  background: #24303c;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  border: 1px solid #1f53c5;
+  font-family: 'calibri';
+  font-size: 18px;
+  color: white;
+}
+
+.form-ingreso p {
+  height: 40px;
+  text-align: center;
+  font-size: 18px;
+  line-height: 40px;
+}
+
+.form-ingreso a {
+  color: white;
+  text-decoration: none;
+}
+
+.form-register a:hover {
+  color: white;
+  text-decoration: underline;
+}
+
+.form-ingreso .botons {
+  width: 100%;
+  background: #1f53c5;
+  border: none;
+  padding: 12px;
+  color: white;
+  margin: 16px 0;
+  font-size: 16px;
+}
+.botons:hover
+{
+    background-color: rgb(109, 170, 51);
+}        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="navbar">
+            <img src="./icon/321-3210681_this-escudo-de-la-universidad-mariano-galvez.png" alt="logo" class="logo">
+            <h1 class="group">Gupo 5</h1>
+            <ul>
+                <li><a href="#">FIFO (First in - First out)</a></li>
+            </ul>    
+        </div>
+        <div class="content">
+           <div class="texto">
+            <img src="./icon/fifo.png" alt="Lfifo" class="Lfifo">
+            <h1 class="welcome">Bienvenido al simulador del planificador del procesos FIFO</h1>
+           </div> 
+           <button class="newSimulation"type="submit" id="newSimulation">Nueva Simulación </button>
+        </div>
+  <div class="buttons">
+    <button class="ingresarDatos" type="submit" id="lanzar-modal">Ingresar Datos</button>
+    <button class="procesarDatos" type="submit" id="procesar">Procesar</button>
+    
+    <div class="promedioEspera">Promedio Espera
+        <label id ="espera"class="espera"></label>
+    </div>
+    
+    <div class="promedioRetorno">Promedio Retorno
+        <label Id = "retorno" class="retorno"></label>
+    </div>
+
+  </div>
+    <div class="data">
+        <div class="viewData">
+            <table id="transactionTable">
+                <thead>
+                    <tr>
+                        <th>Id</th> 
+                        <th>Rafaga de CPU</th>
+                        <th>Tiempo de Llegada</th>  
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="dataSort">
+            <table id="dataSort">
+                <thead>
+                    <tr>
+                        <th>Id</th> 
+                        <th>Rafaga de CPU</th>
+                        <th>Tiempo de Llegada</th>  
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+    <div class="form">
+        <form action="#" id="miForm" class="form-ingreso">
+            <h4>Formulario ingreso</h4>
+            <input class="controls" type="text" name="proceso" id="proceso" placeholder="Ingrese el proceso">
+            <input class="controls" type="text" name="CPU" id="CPU" placeholder="Ingrese la rafaga de CPU">
+            <input class="controls" type="text" name="Tiempo" id="Tiempo" placeholder="Ingrese el tiempo de llegada">
+            <input class="botons" type="submit" id="Aceptar" value="Aceptar">          
+            <input class="botons" type="submit" id="ocultar-modal" value="Salir"> 
+        </section>
+        </form>
+    </div>
+    
+    <script src="./modal.js"></script>
+    <script src="./app.js"></script>
+
+</body>
+</html>
