@@ -105,7 +105,7 @@ function tablaProceso (){
     newTableCellRef.textContent = espera[i];
     
     newTableCellRef = newTableRowRef.insertCell(4);
-    newTableCellRef.textContent = retorno[i];
+    newTableCellRef.textContent = completado[i];
     }
 };
 btnProcesar.addEventListener('click', (e) => {
